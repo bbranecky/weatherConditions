@@ -1,0 +1,33 @@
+{
+    "appKeys": {
+        "OWMWeatherAppMessageKeyBadKey": 91,
+        "OWMWeatherAppMessageKeyDescription": 3,
+        "OWMWeatherAppMessageKeyLocation": 2,
+        "OWMWeatherAppMessageKeyLocationUnavailable": 92,
+        "OWMWeatherAppMessageKeyReply": 1,
+        "OWMWeatherAppMessageKeyRequest": 0,
+        "OWMWeatherAppMessageKeyTempF": 4,
+        "OWMWeatherAppMessageKeyWindSpeed": 5
+    },
+    "capabilities": [
+        ""
+    ],
+    "companyName": "Pebble",
+    "longName": "under-weather-test-app",
+    "projectType": "native",
+    "resources": {
+        "media": []
+    },
+    "sdkVersion": "3",
+    "shortName": "under-weather-app",
+    "targetPlatforms": [
+        "aplite",
+        "basalt",
+        "chalk"
+    ],
+    "uuid": "76a2941b-5953-4c17-87b9-92cc1f9f2ceb",
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": false
+    }
+}
