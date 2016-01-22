@@ -12,17 +12,25 @@ function owmWeatherXHR(url, type, callback) {
 }
 
 function owmWeatherSendToPebble(json) {
-  Pebble.sendAppMessage({
-    'OWMWeatherAppMessageKeyReply': 1,
-    'OWMWeatherAppMessageKeyLocation': json.current_observation.observation_location.city,
-    'OWMWeatherAppMessageKeyDescription': json.current_observation.weather,
-    'OWMWeatherAppMessageKeyTempF': Math.round(json.current_observation.temp_f),
-    'OWMWeatherAppMessageKeyWindSpeed': Math.round(json.current_observation.wind_mph),
-  });
+  var typeOfCall = '';
+  typeOfCall = owmWeatherAPIKey.substr(17,owmWeatherAPIKey.length);
+  console.log(owmWeatherAPIKey.substr(17,owmWeatherAPIKey.length));
+  
+  if (typeOfCall == 'conditions'){
+    Pebble.sendAppMessage({
+      'OWMWeatherAppMessageKeyReply': 1,
+      'OWMWeatherAppMessageKeyConditions': json.current_observation.observation_location.city +';'+
+      json.current_observation.temp_f+';'+json.current_observation.wind_mph,
+      'OWMWeatherAppMessageKeyDescription': json.current_observation.weather,
+      'OWMWeatherAppMessageKeyTempF': Math.round(json.current_observation.temp_f),
+      'OWMWeatherAppMessageKeyWindSpeed': Math.round(json.current_observation.wind_mph),
+    });    
+  }
+  
 }
 
 function owmWeatherLocationSuccess(pos) {
-  var url = 'http://api.wunderground.com/api/' + owmWeatherAPIKey + '/conditions/q/' +
+  var url = 'http://api.wunderground.com/api/' + owmWeatherAPIKey + '/q/' +
     pos.coords.latitude + ',' + pos.coords.longitude + '.json' ;
   console.log('owm-weather: Location success. Contacting OpenWeatherMap.org...');
   console.log( url);
@@ -57,7 +65,7 @@ function owmWeatherHandler(dict) {
       maximumAge: 60000
     });
   }
-};
+}
 
 /**************************** Weather library end *****************************/
 

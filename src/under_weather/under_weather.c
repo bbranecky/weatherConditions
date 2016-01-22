@@ -1,9 +1,9 @@
 #include "under_weather.h"
-
+ 
 typedef enum {
   OWMWeatherAppMessageKeyRequest = 0,
   OWMWeatherAppMessageKeyReply,
-  OWMWeatherAppMessageKeyLocation,
+  OWMWeatherAppMessageKeyConditions,
   OWMWeatherAppMessageKeyDescription,
   OWMWeatherAppMessageKeyTempF,
   OWMWeatherAppMessageKeyWindSpeed,
@@ -18,10 +18,10 @@ static OWMWeatherStatus s_status;
 static char s_api_key[33];
 
 static void inbox_received_handler(DictionaryIterator *iter, void *context) {
+  /*
   Tuple *tupleM;
   uint8_t i;
   
- /* 
   for (i=1;i<8;i++){
   //i=1;
     tupleM = dict_find(iter, i);
@@ -33,14 +33,14 @@ static void inbox_received_handler(DictionaryIterator *iter, void *context) {
   Tuple *reply_tuple = dict_find(iter, OWMWeatherAppMessageKeyReply);
   APP_LOG(APP_LOG_LEVEL_DEBUG, "OWMWeatherAppMessageKeyReply %d",reply_tuple->value->uint8);
   if(reply_tuple) {
-    Tuple *locName_tuple = dict_find(iter, OWMWeatherAppMessageKeyLocation);
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "OWMWeatherAppMessageKeyLocation %s",locName_tuple->value->cstring);
-    strncpy(s_info->locName, locName_tuple->value->cstring, OWM_WEATHER_BUFFER_SIZE);
+    Tuple *locName_tuple = dict_find(iter, OWMWeatherAppMessageKeyConditions);
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "OWMWeatherAppMessageKeyConditions %s",locName_tuple->value->cstring);
+    strncpy(s_info->conditions, locName_tuple->value->cstring, OWM_WEATHER_BUFFER_SIZE);
 
     Tuple *desc_tuple = dict_find(iter, OWMWeatherAppMessageKeyDescription);
     APP_LOG(APP_LOG_LEVEL_DEBUG, "OWMWeatherAppMessageKeyDescription %s",desc_tuple->value->cstring);
     strncpy(s_info->description, desc_tuple->value->cstring, OWM_WEATHER_BUFFER_SIZE);
-
+ 
     Tuple *temp_tuple = dict_find(iter, OWMWeatherAppMessageKeyTempF);
     APP_LOG(APP_LOG_LEVEL_DEBUG, "OWMWeatherAppMessageKeyTempF %i",(int)temp_tuple->value->int32);
     s_info->temp_f = temp_tuple->value->int32;

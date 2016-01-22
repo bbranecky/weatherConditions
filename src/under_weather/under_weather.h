@@ -2,7 +2,7 @@
 
 #include <pebble.h>
 
-#define OWM_WEATHER_BUFFER_SIZE 32
+#define OWM_WEATHER_BUFFER_SIZE 80
 
 //! Possible statuses of the weather library
 typedef enum {
@@ -24,6 +24,8 @@ typedef enum {
 
 //! Struct containing weather data
 typedef struct {
+  //! Name of the location from the weather feed
+  char conditions[OWM_WEATHER_BUFFER_SIZE];
   //! Name of the location from the weather feed
   char locName[OWM_WEATHER_BUFFER_SIZE];
   //! Weather conditions string e.g: "Sky is clear"

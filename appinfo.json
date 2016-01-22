@@ -1,8 +1,8 @@
 {
     "appKeys": {
         "OWMWeatherAppMessageKeyBadKey": 91,
+        "OWMWeatherAppMessageKeyConditions": 2,
         "OWMWeatherAppMessageKeyDescription": 3,
-        "OWMWeatherAppMessageKeyLocation": 2,
         "OWMWeatherAppMessageKeyLocationUnavailable": 92,
         "OWMWeatherAppMessageKeyReply": 1,
         "OWMWeatherAppMessageKeyRequest": 0,

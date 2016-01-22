@@ -1,4 +1,6 @@
 #include <pebble.h>
+#include <stdio.h>
+#include <string.h>
 
 #include "under_weather/under_weather.h"
 
@@ -6,8 +8,14 @@ static Window *s_window;
 static TextLayer *s_text_layer;
 static const char AM[3]="AM";
 static const char PM[3]="PM";
-
+ 
 static void weather_callback(OWMWeatherInfo *info, OWMWeatherStatus status) {
+  char originalString[] = "Haves;123;Stonebank School, WI;345;";
+  char parseStr[5][40];
+  int i=0;
+  int j=1;
+  int indexLoc[5]={-1,0,0,0,0};
+
   switch(status) {
     case OWMWeatherStatusAvailable:
     {
@@ -16,6 +24,16 @@ static void weather_callback(OWMWeatherInfo *info, OWMWeatherStatus status) {
       char *ampm;
       int dispHr;
       
+      while (info->conditions[i] != '\0') {
+         if (info->conditions[i]==';') {
+            indexLoc[j]=i;
+            info->conditions[i]=0;
+            memcpy(parseStr[j-1], info->conditions + indexLoc[j-1]+1, indexLoc[j]-indexLoc[j-1]);
+            j++;
+         }
+         i++;
+      }
+
       if (info->timestamp->tm_hour > 12) {
         dispHr = info->timestamp->tm_hour - 12;
         ampm=(char *)PM;
@@ -24,9 +42,10 @@ static void weather_callback(OWMWeatherInfo *info, OWMWeatherStatus status) {
         dispHr = info->timestamp->tm_hour;
         ampm=(char *)AM;
       }
+
       snprintf(s_buffer, sizeof(s_buffer),
-        "Temp: %ddF\n\nDescription:\n%s\n\nWind speed: %d\n\nLocation: \n%s\n%02d:%02d%s",
-        info->temp_f, info->description, info->wind_speed, info->locName, dispHr, info->timestamp->tm_min,ampm);
+        "Temp: %ddF\nDescrpt:%s\n%s\n%s\nWind speed: %d\nLocation: \n%s\n%02d:%02d%s",
+        info->temp_f, info->description,parseStr[0],parseStr[1], info->wind_speed, info->conditions, dispHr, info->timestamp->tm_min,ampm);
       text_layer_set_text(s_text_layer, s_buffer);
     }
       break;
@@ -84,6 +103,8 @@ static void window_unload(Window *window) {
 }
 
 static void init() {
+  char stringBuffer[100];
+
   s_window = window_create();
   window_set_window_handlers(s_window, (WindowHandlers) {
     .load = window_load,
@@ -93,8 +114,12 @@ static void init() {
 
   // Replace this with your own API key from OpenWeatherMap.org
   char *api_key = "9120e81acb7c7f27";
-  owm_weather_init(api_key);
-  
+  char *api_type = "conditions";
+  strcpy(stringBuffer, api_key);
+  strcat(stringBuffer, "/");
+  strcat(stringBuffer, api_type);
+  owm_weather_init(stringBuffer);
+    
   window_set_click_config_provider(s_window, click_config_provider);
   
   app_timer_register(3000, js_ready_handler, NULL);
